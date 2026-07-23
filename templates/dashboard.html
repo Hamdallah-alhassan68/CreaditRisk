@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Bank Credit Dashboard</title>
+
+<link rel="stylesheet" 
+href="{{ url_for('static', filename='style.css') }}">
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+</head>
+
+
+<body>
+
+
+<div class="dashboard">
+
+
+<h1>Credit Risk Assessment Dashboard</h1>
+
+
+<div class="card">
+
+
+<h2>Prediction Result</h2>
+
+
+{% if result == "HIGH RISK" %}
+
+<h1 class="danger">
+    🔴HIGH RISK
+</h1>
+
+
+{% else %}
+
+<h1 class="safe">
+    🟢 LOW RISK
+</h1>
+
+
+{% endif %}
+
+
+
+<p>
+Risk Probability:
+<strong>{{ probability }}%</strong>
+</p>
+
+
+
+</div>
+
+
+
+
+<div class="card">
+
+<h2>Risk Probability</h2>
+
+
+<canvas id="riskChart"></canvas>
+
+
+</div>
+<div class="card">
+
+    <h2>Feature Importance</h2>
+
+    <img
+        src="{{ url_for('static', filename='feature_importance.png') }}"
+        width="100%"
+    >
+
+</div>
+
+
+
+
+<div class="card">
+
+<h2>Recommendation</h2>
+
+
+{% if result == "HIGH RISK" %}
+
+<p>
+⚠ Loan Application requires further review.
+</p>
+
+
+{% else %}
+
+<p>
+✓ Loan Application risk level is acceptable.
+</p>
+
+
+{% endif %}
+
+
+</div>
+
+
+
+</div>
+
+
+
+
+<script>
+
+
+const probability = Number("{{ probability }}");
+
+
+new Chart(
+document.getElementById('riskChart'),
+
+{
+
+type:'doughnut',
+
+data:{
+
+
+labels:[
+"Risk Probability",
+"Remaining"
+],
+
+
+datasets:[{
+
+data:[
+probability,
+100-probability
+]
+
+
+}]
+
+
+},
+
+
+options:{
+
+responsive:true
+
+}
+
+
+}
+
+);
+
+
+</script>
+
+
+
+</body>
+
+</html>
